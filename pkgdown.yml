@@ -1,0 +1,21 @@
+pandoc: 3.1.11
+pkgdown: 2.1.3
+pkgdown_sha: ~
+articles:
+  a00_introduction: a00_introduction.html
+  a01_building_base_cohorts: a01_building_base_cohorts.html
+  a02_cohort_table_requirements: a02_cohort_table_requirements.html
+  a03_require_demographics: a03_require_demographics.html
+  a04_require_intersections: a04_require_intersections.html
+  a05_update_cohort_start_end: a05_update_cohort_start_end.html
+  a06_concatanate_cohorts: a06_concatanate_cohorts.html
+  a07_filter_cohorts: a07_filter_cohorts.html
+  a08_split_cohorts: a08_split_cohorts.html
+  a09_combine_cohorts: a09_combine_cohorts.html
+  a10_match_cohorts: a10_match_cohorts.html
+  a11_benchmark: a11_benchmark.html
+  a12_behind_the_scenes: a12_behind_the_scenes.html
+last_built: 2025-10-07T10:37Z
+urls:
+  reference: https://ohdsi.github.io/CohortConstructor/reference
+  article: https://ohdsi.github.io/CohortConstructor/articles
