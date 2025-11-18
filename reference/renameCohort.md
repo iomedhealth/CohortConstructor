@@ -1,0 +1,48 @@
+# Utility function to change the name of a cohort.
+
+Utility function to change the name of a cohort.
+
+## Usage
+
+``` r
+renameCohort(cohort, newCohortName, cohortId = NULL)
+```
+
+## Arguments
+
+- cohort:
+
+  A cohort table in a cdm reference.
+
+- newCohortName:
+
+  Character vector with same
+
+- cohortId:
+
+  Vector identifying which cohorts to modify (cohort_definition_id or
+  cohort_name). If NULL, all cohorts will be used; otherwise, only the
+  specified cohorts will be modified, and the rest will remain
+  unchanged.
+
+## Value
+
+A cohort_table object.
+
+## Examples
+
+``` r
+# \donttest{
+library(CohortConstructor)
+if(isTRUE(omock::isMockDatasetDownloaded("GiBleed"))){
+cdm <- mockCohortConstructor()
+
+settings(cdm$cohort1)
+
+cdm$cohort1 <- cdm$cohort1 |>
+  renameCohort(newCohortName = "new_name")
+
+settings(cdm$cohort1)
+}
+# }
+```

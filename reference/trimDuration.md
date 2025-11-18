@@ -1,0 +1,53 @@
+# Trim cohort dates to be within a certain interval of days
+
+`trimDuration()` resets the cohort start and end date, keeping only
+those which include the specified amount of days
+
+## Usage
+
+``` r
+trimDuration(cohort, daysInCohort, cohortId = NULL, name = tableName(cohort))
+```
+
+## Arguments
+
+- cohort:
+
+  A cohort table in a cdm reference.
+
+- daysInCohort:
+
+  Number of days cohort relative to current cohort start dates. Cohort
+  entries will be trimmed to these dates. Note, cohort entry and exit on
+  the same day counts as one day in the cohort.Set lower bound to 1 if
+  keeping cohort start to the same as current cohort start.
+
+- cohortId:
+
+  Vector identifying which cohorts to modify (cohort_definition_id or
+  cohort_name). If NULL, all cohorts will be used; otherwise, only the
+  specified cohorts will be modified, and the rest will remain
+  unchanged.
+
+- name:
+
+  Name of the new cohort table created in the cdm object.
+
+## Value
+
+The cohort table with any cohort entries that last less or more than the
+required duration dropped
+
+## Examples
+
+``` r
+# \donttest{
+library(CohortConstructor)
+if(isTRUE(omock::isMockDatasetDownloaded("GiBleed"))){
+cdm <- mockCohortConstructor()
+
+cdm$cohort1 |>
+  requireDuration(daysInCohort = c(2, Inf))
+}
+# }
+```

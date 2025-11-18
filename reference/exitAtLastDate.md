@@ -1,0 +1,81 @@
+# Set cohort end date to the last of a set of column dates
+
+`exitAtLastDate()` resets cohort end date based on a set of specified
+column dates. The last date that occurs is chosen.
+
+## Usage
+
+``` r
+exitAtLastDate(
+  cohort,
+  dateColumns,
+  cohortId = NULL,
+  returnReason = FALSE,
+  keepDateColumns = TRUE,
+  name = tableName(cohort),
+  .softValidation = FALSE
+)
+```
+
+## Arguments
+
+- cohort:
+
+  A cohort table in a cdm reference.
+
+- dateColumns:
+
+  Character vector indicating date columns in the cohort table to
+  consider.
+
+- cohortId:
+
+  Vector identifying which cohorts to modify (cohort_definition_id or
+  cohort_name). If NULL, all cohorts will be used; otherwise, only the
+  specified cohorts will be modified, and the rest will remain
+  unchanged.
+
+- returnReason:
+
+  If TRUE it will return a column indicating which of the `dateColumns`
+  was used.
+
+- keepDateColumns:
+
+  If TRUE the returned cohort will keep columns in `dateColumns`.
+
+- name:
+
+  Name of the new cohort table created in the cdm object.
+
+- .softValidation:
+
+  Whether to perform a soft validation of consistency. If set to FALSE
+  four additional checks will be performed: 1) a check that cohort end
+  date is not before cohort start date, 2) a check that there are no
+  missing values in required columns, 3) a check that cohort duration is
+  all within observation period, and 4) that there are no overlapping
+  cohort entries
+
+## Value
+
+The cohort table.
+
+## Examples
+
+``` r
+# \donttest{
+library(CohortConstructor)
+library(PatientProfiles)
+if(isTRUE(omock::isMockDatasetDownloaded("GiBleed"))){
+cdm <- mockCohortConstructor()
+
+cdm$cohort1 <- cdm$cohort1 |>
+  addTableIntersectDate(tableName = "observation", nameStyle = "next_obs", order = "first") |>
+  addFutureObservation(futureObservationType = "date", name = "cohort1")
+
+cdm$cohort1 |>
+  exitAtLastDate(dateColumns = c("next_obs", "future_observation"))
+}
+# }
+```
