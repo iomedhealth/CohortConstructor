@@ -67,13 +67,21 @@ dropped.
 ``` r
 # \donttest{
 library(CohortConstructor)
-if(isTRUE(omock::isMockDatasetDownloaded("GiBleed"))){
 cdm <- mockCohortConstructor()
+#> ℹ Reading GiBleed tables.
 cdm$cohort1 |>
   trimToDateRange(startDate = "cohort_start_date",
                   endDate = "cohort_end_date",
                   dateRange = as.Date(c("2015-01-01",
                                         "2015-12-31")))
-}
+#> # A tibble: 6 × 4
+#>   cohort_definition_id subject_id cohort_start_date cohort_end_date
+#>                  <int>      <int> <date>            <date>         
+#> 1                    1          8 2015-01-01        2015-05-29     
+#> 2                    1         36 2015-01-02        2015-04-15     
+#> 3                    1         48 2015-01-01        2015-12-31     
+#> 4                    1         50 2015-01-01        2015-09-15     
+#> 5                    1         77 2015-01-01        2015-12-31     
+#> 6                    1         80 2015-01-17        2015-09-01     
 # }
 ```

@@ -38,26 +38,26 @@ each cohort.
 ``` r
 cdm$medications |> sampleCohorts(cohortId = NULL, n = 100)
 #> # Source:   table<results.test_medications> [?? x 4]
-#> # Database: DuckDB 1.4.1 [unknown@Linux 6.11.0-1018-azure:R 4.5.2//tmp/Rtmprj1ZIP/file2473520880e5.duckdb]
+#> # Database: DuckDB 1.4.3 [unknown@Linux 6.11.0-1018-azure:R 4.5.2//tmp/RtmpWFDbnw/file254716a90b85.duckdb]
 #>    cohort_definition_id subject_id cohort_start_date cohort_end_date
 #>                   <int>      <int> <date>            <date>         
-#>  1                    1       2662 2000-09-29        2000-10-13     
-#>  2                    1        867 1971-05-29        1971-06-12     
-#>  3                    1       2844 1959-09-19        1959-09-26     
-#>  4                    2       2033 1995-02-25        1995-02-25     
-#>  5                    1       4753 1986-11-28        1986-12-12     
-#>  6                    2       2776 2014-01-14        2014-01-14     
-#>  7                    2       5132 2003-06-15        2003-06-15     
-#>  8                    1       2315 1989-10-09        1989-10-23     
-#>  9                    1       4970 1964-06-21        1964-06-28     
-#> 10                    1       3795 1993-06-28        1993-07-28     
+#>  1                    1       1077 1999-08-14        1999-08-28     
+#>  2                    2       5329 1980-09-04        1980-09-04     
+#>  3                    1       1609 1955-05-19        1955-06-02     
+#>  4                    1       2802 1947-01-28        1947-02-04     
+#>  5                    1       1245 2013-06-05        2013-06-19     
+#>  6                    1       4878 1988-01-25        1988-02-08     
+#>  7                    1         74 2017-08-20        2017-09-03     
+#>  8                    2       3545 2011-12-13        2011-12-13     
+#>  9                    1       3258 1990-12-23        1990-12-30     
+#> 10                    1       3686 1985-02-25        1985-03-04     
 #> # ℹ more rows
 
 cohortCount(cdm$medications)
 #> # A tibble: 2 × 3
 #>   cohort_definition_id number_records number_subjects
 #>                  <int>          <int>           <int>
-#> 1                    1            339             100
+#> 1                    1            361             100
 #> 2                    2            100             100
 ```
 

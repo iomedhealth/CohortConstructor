@@ -34,15 +34,22 @@ A cohort_table object.
 ``` r
 # \donttest{
 library(CohortConstructor)
-if(isTRUE(omock::isMockDatasetDownloaded("GiBleed"))){
 cdm <- mockCohortConstructor()
+#> ℹ Reading GiBleed tables.
 
 settings(cdm$cohort1)
+#> # A tibble: 1 × 2
+#>   cohort_definition_id cohort_name
+#>                  <int> <chr>      
+#> 1                    1 cohort_1   
 
 cdm$cohort1 <- cdm$cohort1 |>
   renameCohort(newCohortName = "new_name")
 
 settings(cdm$cohort1)
-}
+#> # A tibble: 1 × 2
+#>   cohort_definition_id cohort_name
+#>                  <int> <chr>      
+#> 1                    1 new_name   
 # }
 ```

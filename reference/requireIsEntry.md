@@ -39,9 +39,8 @@ A cohort table in a cdm reference.
 ``` r
 # \donttest{
 library(CohortConstructor)
-if(isTRUE(omock::isMockDatasetDownloaded("GiBleed"))){
 cdm <- mockCohortConstructor()
+#> ℹ Reading GiBleed tables.
 cdm$cohort1 <- requireIsEntry(cdm$cohort1, c(1, Inf))
-}
 # }
 ```

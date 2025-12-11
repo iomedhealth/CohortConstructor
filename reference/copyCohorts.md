@@ -37,9 +37,10 @@ A new cohort table containing cohorts from the original cohort table.
 ``` r
 # \donttest{
 library(CohortConstructor)
-if(isTRUE(omock::isMockDatasetDownloaded("GiBleed"))){
 cdm <- mockCohortConstructor()
+#> ℹ Reading GiBleed tables.
 cdm$cohort3 <- copyCohorts(cdm$cohort1, n = 2, cohortId = 1, name = "cohort3")
-}
+#> Warning: ! 1 casted column in cohort3 as do not match expected column type:
+#> • `cohort_definition_id` from numeric to integer
 # }
 ```

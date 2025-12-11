@@ -65,11 +65,11 @@ The cohort table.
 
 ``` r
 # \donttest{
-if(isTRUE(omock::isMockDatasetDownloaded("GiBleed"))){
 library(CohortConstructor)
 library(PatientProfiles)
 
 cdm <- mockCohortConstructor()
+#> ℹ Reading GiBleed tables.
 
 cdm$cohort1 <- cdm$cohort1 |>
   addTableIntersectDate(
@@ -82,6 +82,21 @@ cdm$cohort1 <- cdm$cohort1 |>
 
 cdm$cohort1 |>
   entryAtLastDate(dateColumns = c("prior_drug", "prior_observation"))
-}
+#> Joining with `by = join_by(cohort_definition_id, subject_id, cohort_end_date)`
+#> # A tibble: 64 × 6
+#>    cohort_definition_id subject_id cohort_start_date cohort_end_date prior_drug
+#>                   <int>      <int> <date>            <date>          <date>    
+#>  1                    1          1 2005-10-04        2012-06-11      2005-10-04
+#>  2                    1          4 2011-11-06        2012-06-05      2011-11-06
+#>  3                    1          5 2012-12-02        2014-06-22      2012-12-02
+#>  4                    1          6 1987-05-13        1989-09-05      1987-05-13
+#>  5                    1          7 1986-12-28        1989-06-13      1986-12-28
+#>  6                    1          8 1980-02-25        1986-11-20      1980-02-25
+#>  7                    1          9 2010-07-30        2011-05-13      2010-07-30
+#>  8                    1         10 2013-09-22        2014-08-03      2013-09-22
+#>  9                    1         11 1988-11-02        1993-01-16      1988-11-02
+#> 10                    1         12 2005-06-24        2008-03-31      2005-06-24
+#> # ℹ 54 more rows
+#> # ℹ 1 more variable: prior_observation <date>
 # }
 ```

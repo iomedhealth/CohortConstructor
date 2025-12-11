@@ -66,12 +66,15 @@ A cohort table.
 ``` r
 # \donttest{
 library(CohortConstructor)
-if(isTRUE(omock::isMockDatasetDownloaded("GiBleed"))){
 cdm <- mockCohortConstructor()
+#> ℹ Reading GiBleed tables.
 
 cdm$cohort3 <- intersectCohorts(cohort = cdm$cohort2, name = "cohort3")
 
 settings(cdm$cohort3)
-}
+#> # A tibble: 1 × 5
+#>   cohort_definition_id cohort_name         gap cohort_1 cohort_2
+#>                  <int> <chr>             <dbl>    <dbl>    <dbl>
+#> 1                    1 cohort_1_cohort_2     0        1        1
 # }
 ```

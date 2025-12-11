@@ -117,13 +117,21 @@ A cohort table
 ``` r
 # \donttest{
 library(CohortConstructor)
-if(isTRUE(omock::isMockDatasetDownloaded("GiBleed"))){
 cdm <- mockCohortConstructor()
+#> ℹ Reading GiBleed tables.
 
 cdm$cohort <- conceptCohort(cdm = cdm, conceptSet = list(a = 444074), name = "cohort")
+#> Warning: ! `codelist` casted to integers.
+#> ✖ Domain NA (1 concept) excluded because it is not supported.
+#> ℹ No cohort entries found, returning empty cohort table.
 
 cdm$cohort |>
   attrition()
+#> # A tibble: 1 × 7
+#>   cohort_definition_id number_records number_subjects reason_id reason          
+#>                  <int>          <int>           <int>     <int> <chr>           
+#> 1                    1              0               0         1 Initial qualify…
+#> # ℹ 2 more variables: excluded_records <int>, excluded_subjects <int>
 
 # Create a cohort based on a concept set. The cohort exit is set to the event start date.
 # If two records overlap, the cohort end date is set as the sum of the duration of
@@ -140,9 +148,17 @@ cdm$study_cohort <- conceptCohort(cdm = cdm,
                                   exit = "event_start_date",
                                   overlap = "extend",
                                   subsetCohort = "cohort")
+#> Warning: ! `codelist` casted to integers.
+#> Warning: There are no individuals in the `subsetCohort` and `subsetCohortId` provided.
+#> Returning empty cohort.
 
 cdm$study_cohort |>
   attrition()
-}
+#> # A tibble: 2 × 7
+#>   cohort_definition_id number_records number_subjects reason_id reason          
+#>                  <int>          <int>           <int>     <int> <chr>           
+#> 1                    1              0               0         1 Qualifying init…
+#> 2                    2              0               0         1 Qualifying init…
+#> # ℹ 2 more variables: excluded_records <int>, excluded_subjects <int>
 # }
 ```

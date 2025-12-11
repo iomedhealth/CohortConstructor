@@ -61,11 +61,29 @@ demographic requirements
 ``` r
 # \donttest{
 library(CohortConstructor)
-if(isTRUE(omock::isMockDatasetDownloaded("GiBleed"))){
 cdm <- mockCohortConstructor()
+#> ℹ Reading GiBleed tables.
 
 cdm$cohort1 |>
   trimDemographics(ageRange = list(c(10, 30)))
-}
+#> ℹ Building new trimmed cohort
+#> Adding demographics information
+#> Creating initial cohort
+#> Trim age
+#> ✔ Cohort trimmed
+#> # A tibble: 30 × 4
+#>    cohort_definition_id subject_id cohort_start_date cohort_end_date
+#>                   <int>      <int> <date>            <date>         
+#>  1                    1          1 2008-06-01        2010-06-17     
+#>  2                    1          2 2017-02-13        2018-03-16     
+#>  3                    1          3 2010-03-22        2010-09-03     
+#>  4                    1          5 2010-10-02        2010-10-19     
+#>  5                    1         11 2008-05-27        2009-06-30     
+#>  6                    1         12 2008-03-02        2008-03-19     
+#>  7                    1         15 1985-05-20        1986-06-09     
+#>  8                    1         20 2009-11-19        2010-09-14     
+#>  9                    1         28 2010-12-02        2011-02-24     
+#> 10                    1         30 2004-06-04        2004-10-12     
+#> # ℹ 20 more rows
 # }
 ```

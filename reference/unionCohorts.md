@@ -57,14 +57,17 @@ A cohort table.
 ``` r
 # \donttest{
 library(CohortConstructor)
-if(isTRUE(omock::isMockDatasetDownloaded("GiBleed"))){
 cdm <- mockCohortConstructor()
+#> ℹ Reading GiBleed tables.
 
 cdm$cohort2 <- cdm$cohort2 |>
   unionCohorts()
 
 settings(cdm$cohort2)
+#> # A tibble: 1 × 3
+#>   cohort_definition_id cohort_name         gap
+#>                  <int> <chr>             <dbl>
+#> 1                    1 cohort_1_cohort_2     0
 
-}
 # }
 ```

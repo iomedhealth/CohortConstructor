@@ -59,11 +59,24 @@ observation requirement
 ``` r
 # \donttest{
 library(CohortConstructor)
-if(isTRUE(omock::isMockDatasetDownloaded("GiBleed"))){
 cdm <- mockCohortConstructor()
+#> ℹ Reading GiBleed tables.
 cdm$cohort1 |>
   requireFutureObservation(indexDate = "cohort_start_date",
                            minFutureObservation = 30)
-}
+#> # A tibble: 52 × 4
+#>    cohort_definition_id subject_id cohort_start_date cohort_end_date
+#>  *                <int>      <int> <date>            <date>         
+#>  1                    1          1 1994-04-13        1994-05-08     
+#>  2                    1          2 1993-04-23        1996-01-19     
+#>  3                    1          3 1996-03-19        1996-09-17     
+#>  4                    1          5 2014-07-07        2014-08-23     
+#>  5                    1          6 1992-02-18        2001-10-18     
+#>  6                    1         10 2000-07-16        2002-07-27     
+#>  7                    1         13 1998-02-17        2002-11-23     
+#>  8                    1         16 1992-01-22        1997-11-26     
+#>  9                    1         17 2011-11-12        2013-10-22     
+#> 10                    1         19 2005-01-11        2005-12-31     
+#> # ℹ 42 more rows
 # }
 ```

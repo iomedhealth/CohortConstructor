@@ -24,10 +24,17 @@ cdm object
 ``` r
 # \donttest{
 library(CohortConstructor)
-if(isTRUE(omock::isMockDatasetDownloaded("GiBleed"))){
 cdm <- mockCohortConstructor()
+#> ℹ Reading GiBleed tables.
 
 cdm
-}
+#> 
+#> ── # OMOP CDM reference (local) of mock database ───────────────────────────────
+#> • omop tables: cdm_source, concept, concept_ancestor, concept_relationship,
+#> concept_synonym, condition_occurrence, death, drug_exposure, drug_strength,
+#> measurement, observation, observation_period, person, vocabulary
+#> • cohort tables: cohort1, cohort2
+#> • achilles tables: -
+#> • other tables: -
 # }
 ```

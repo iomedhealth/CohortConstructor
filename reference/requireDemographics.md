@@ -73,14 +73,28 @@ demographic requirements
 ``` r
 # \donttest{
 library(CohortConstructor)
-if(isTRUE(omock::isMockDatasetDownloaded("GiBleed"))){
 cdm <- mockCohortConstructor()
+#> Warning: '/tmp/RtmpawHz80/id_qvh' already exists
+#> ℹ Reading GiBleed tables.
 
 cdm$cohort1 |>
   requireDemographics(indexDate = "cohort_start_date",
                       ageRange = list(c(18, 65)),
                       sex = "Female",
                       minPriorObservation = 365)
-}
+#> # A tibble: 11 × 4
+#>    cohort_definition_id subject_id cohort_start_date cohort_end_date
+#>  *                <int>      <int> <date>            <date>         
+#>  1                    1          2 2016-10-22        2017-09-09     
+#>  2                    1          9 2016-01-11        2017-12-06     
+#>  3                    1         23 1998-08-13        1998-11-14     
+#>  4                    1         50 2013-03-26        2016-11-30     
+#>  5                    1         51 2015-09-24        2015-10-30     
+#>  6                    1         54 2004-03-03        2005-12-19     
+#>  7                    1         58 1999-03-08        2002-10-02     
+#>  8                    1         60 2012-02-11        2014-01-26     
+#>  9                    1         65 2019-01-01        2019-08-24     
+#> 10                    1         70 1997-11-14        1998-01-15     
+#> 11                    1         72 2016-07-23        2017-09-13     
 # }
 ```

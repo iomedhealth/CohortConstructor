@@ -87,8 +87,8 @@ library(dplyr)
 #> The following objects are masked from ‘package:base’:
 #> 
 #>     intersect, setdiff, setequal, union
-if(isTRUE(omock::isMockDatasetDownloaded("GiBleed"))){
 cdm <- mockCohortConstructor()
+#> ℹ Reading GiBleed tables.
 cdm$new_matched_cohort <- cdm$cohort2 |>
   matchCohorts(
     name = "new_matched_cohort",
@@ -96,7 +96,22 @@ cdm$new_matched_cohort <- cdm$cohort2 |>
     matchSex = TRUE,
     matchYearOfBirth = TRUE,
     ratio = 1)
+#> Starting matching
+#> ℹ Creating copy of target cohort.
+#> • 1 cohort to be matched.
+#> ℹ Creating controls cohorts.
+#> ℹ Excluding cases from controls
+#> • Matching by gender_concept_id and year_of_birth
+#> • Removing controls that were not in observation at index date
+#> • Excluding target records whose pair is not in observation
+#> • Adjusting ratio
+#> Binding cohorts
+#> ✔ Done
 cdm$new_matched_cohort
-}
+#> # A tibble: 2 × 5
+#>   cohort_definition_id subject_id cohort_start_date cohort_end_date cluster_id
+#> *                <int>      <int> <date>            <date>               <int>
+#> 1                    1          2 2005-01-05        2006-06-24              11
+#> 2                    2         86 2005-01-05        2009-12-25              11
 # }
 ```

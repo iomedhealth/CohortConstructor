@@ -49,3 +49,20 @@ collapseCohorts(
 ## Value
 
 A cohort table
+
+## Examples
+
+``` r
+# \donttest{
+library(CohortConstructor)
+cdm <- mockCohortConstructor()
+#> ℹ Reading GiBleed tables.
+# collapse just cohort 1, with a gap of 7 days
+cdm$cohort1 <- cdm$cohort1 |>
+  collapseCohorts(cohortId = 1, gap = 7)
+
+# collapse both cohorts with a gap of 1 year, and change table name
+cdm$collapsed_cohort <- cdm$cohort1 |>
+  collapseCohorts(gap = 365, name = "collapsed_cohort")
+# }
+```

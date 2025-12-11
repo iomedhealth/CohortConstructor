@@ -112,13 +112,33 @@ Cohort table with only those entries satisfying the criteria
 ``` r
 # \donttest{
 library(CohortConstructor)
-if(isTRUE(omock::isMockDatasetDownloaded("GiBleed"))){
 cdm <- mockCohortConstructor()
+#> ℹ Reading GiBleed tables.
 cdm$cohort1 |>
   requireCohortIntersect(targetCohortTable = "cohort2",
                          targetCohortId = 1,
                          indexDate = "cohort_start_date",
                          window = c(-Inf, 0))
-}
+#> # A tibble: 18 × 4
+#>    cohort_definition_id subject_id cohort_start_date cohort_end_date
+#>  *                <int>      <int> <date>            <date>         
+#>  1                    1          1 2004-10-14        2005-01-25     
+#>  2                    1          2 1997-08-26        2000-03-08     
+#>  3                    1          8 1970-11-10        1970-12-09     
+#>  4                    1         16 1978-03-25        1992-12-23     
+#>  5                    1         25 1996-03-04        2010-07-09     
+#>  6                    1         30 2006-04-18        2007-06-06     
+#>  7                    1         33 1987-03-06        1991-01-04     
+#>  8                    1         39 2017-03-23        2017-03-26     
+#>  9                    1         40 2009-10-03        2012-04-24     
+#> 10                    1         43 1985-02-12        1998-09-23     
+#> 11                    1         44 2004-12-30        2007-04-15     
+#> 12                    1         48 2006-08-29        2010-10-02     
+#> 13                    1         54 1986-11-09        1988-01-06     
+#> 14                    1         59 1992-06-28        2000-05-31     
+#> 15                    1         62 1967-09-25        1971-07-26     
+#> 16                    1         65 1988-01-24        1999-05-24     
+#> 17                    1         67 2002-03-09        2002-03-13     
+#> 18                    1         69 1988-03-26        1989-02-02     
 # }
 ```

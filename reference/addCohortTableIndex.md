@@ -19,3 +19,14 @@ addCohortTableIndex(cohort)
 ## Value
 
 The cohort table
+
+## Examples
+
+``` r
+# \donttest{
+library(CohortConstructor)
+cdm <- mockCohortConstructor()
+#> ℹ Reading GiBleed tables.
+cdm$cohort1 <- addCohortTableIndex(cdm$cohort1)
+# }
+```

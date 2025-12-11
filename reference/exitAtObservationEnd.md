@@ -62,9 +62,22 @@ The cohort table.
 ``` r
 # \donttest{
 library(CohortConstructor)
-if(isTRUE(omock::isMockDatasetDownloaded("GiBleed"))){
 cdm <- mockCohortConstructor()
+#> ℹ Reading GiBleed tables.
 cdm$cohort1 |> exitAtObservationEnd()
-}
+#> # A tibble: 61 × 4
+#>    cohort_definition_id subject_id cohort_start_date cohort_end_date
+#>  *                <int>      <int> <date>            <date>         
+#>  1                    1         42 1970-09-15        1970-12-29     
+#>  2                    1         80 1977-12-07        1983-05-23     
+#>  3                    1         50 1979-03-16        1985-03-23     
+#>  4                    1         51 1980-02-11        1988-05-01     
+#>  5                    1         28 1981-03-25        1986-06-15     
+#>  6                    1         70 1983-06-05        1995-12-27     
+#>  7                    1         79 1987-05-15        2006-07-06     
+#>  8                    1         25 1988-08-10        2015-10-29     
+#>  9                    1          1 1988-11-14        1989-06-21     
+#> 10                    1         61 1991-06-04        2013-10-01     
+#> # ℹ 51 more rows
 # }
 ```

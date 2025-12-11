@@ -95,14 +95,17 @@ Cohort table
 ``` r
 # \donttest{
 library(CohortConstructor)
-if(isTRUE(omock::isMockDatasetDownloaded("GiBleed"))){
 cdm <- mockCohortConstructor()
+#> ℹ Reading GiBleed tables.
 
 cdm$cohort2 <-  requireConceptIntersect(
   cohort = cdm$cohort1,
   conceptSet = list(a = 194152),
   window = c(-Inf, 0),
   name = "cohort2")
-  }
-  # }
+#> Warning: ! `codelist` casted to integers.
+#> ! 1 concept(s) from domain NA eliminated as it is not supported.
+#> ℹ Supported domains are: device, specimen, measurement, drug, condition,
+#>   observation, procedure, episode, and visit.
+# }
 ```

@@ -53,13 +53,19 @@ A cohort table.
 ``` r
 # \donttest{
 library(CohortConstructor)
-if(isTRUE(omock::isMockDatasetDownloaded("GiBleed"))){
 cdm <- mockCohortConstructor()
+#> ℹ Reading GiBleed tables.
 
 cdm$cohort1 <- cdm$cohort1 |>
   yearCohorts(years = 2000:2002)
 
 settings(cdm$cohort1)
-}
+#> # A tibble: 3 × 5
+#>   cohort_definition_id cohort_name   target_cohort_definition_id  year
+#>                  <int> <chr>                               <int> <int>
+#> 1                    1 cohort_1_2000                           1  2000
+#> 2                    2 cohort_1_2001                           1  2001
+#> 3                    3 cohort_1_2002                           1  2002
+#> # ℹ 1 more variable: target_cohort_name <chr>
 # }
 ```
