@@ -37,17 +37,8 @@ library(omock)
 library(clock)
 
 cdm <- mockCdmFromDataset(datasetName = "GiBleed", source = "duckdb")
-#> ℹ Reading GiBleed tables.
-#> ℹ Adding drug_strength table.
-#> ℹ Creating local <cdm_reference> object.
-#> ℹ Inserting <cdm_reference> into duckdb.
 
 cdm$cohort <- demographicsCohort(cdm = cdm, name = "cohort", sex = "Female")
-#> ℹ Building new trimmed cohort
-#> Adding demographics information
-#> Creating initial cohort
-#> Trim sex
-#> ✔ Cohort trimmed
 ```
 
 ## Exit at Specific Date
@@ -112,13 +103,6 @@ cdm$medications <- conceptCohort(
   cdm = cdm, name = "medications",
   conceptSet = list("diclofenac" = 1124300, "acetaminophen" = 1127433)
 )
-#> Warning: ! `codelist` casted to integers.
-#> ℹ Subsetting table drug_exposure using 2 concepts with domain: drug.
-#> ℹ Combining tables.
-#> ℹ Creating cohort attributes.
-#> ℹ Applying cohort requirements.
-#> ℹ Merging overlapping records.
-#> ✔ Cohort medications created.
 
 # add date first ocurrence of these drugs from index date
 cdm$cohort_dates <- cdm$cohort |> 
@@ -134,22 +118,21 @@ cdm$cohort_entry_first <- cdm$cohort_dates |>
     dateColumns = c("diclofenac", "acetaminophen", "cohort_end_date"), 
     name = "cohort_entry_first"
   )
-#> Joining with `by = join_by(cohort_definition_id, subject_id, cohort_end_date)`
 cdm$cohort_entry_first 
 #> # Source:   table<results.test_cohort_entry_first> [?? x 6]
-#> # Database: DuckDB 1.4.3 [unknown@Linux 6.11.0-1018-azure:R 4.5.2//tmp/RtmpZljjUe/file24bae3e85ba.duckdb]
+#> # Database: DuckDB 1.4.3 [unknown@Linux 6.11.0-1018-azure:R 4.5.2//tmp/Rtmpk0DLV0/file26f52f8a5a3a.duckdb]
 #>    cohort_definition_id subject_id cohort_start_date cohort_end_date diclofenac
 #>                   <int>      <int> <date>            <date>          <date>    
-#>  1                    1        756 1973-08-23        2019-02-27      NA        
-#>  2                    1       2115 1971-09-05        2018-11-05      NA        
-#>  3                    1        295 1980-07-18        2018-10-04      NA        
-#>  4                    1       4613 1980-09-10        2019-06-02      NA        
-#>  5                    1       4694 1982-02-07        2019-03-24      2018-01-17
-#>  6                    1       4411 1946-03-13        2018-07-02      NA        
-#>  7                    1        410 1975-02-18        2019-03-08      1986-12-16
-#>  8                    1       2025 1938-07-18        2019-06-23      1946-12-28
-#>  9                    1       2054 1973-04-16        2019-06-26      NA        
-#> 10                    1       2909 1952-03-21        2007-07-23      1986-09-03
+#>  1                    1       3823 1969-10-25        2016-11-23      1993-10-23
+#>  2                    1       5331 1989-10-13        2018-09-05      NA        
+#>  3                    1       3784 1937-05-04        1993-08-31      1965-02-14
+#>  4                    1       1847 1919-12-13        1995-07-02      NA        
+#>  5                    1       3000 1951-07-01        2018-06-29      1983-09-20
+#>  6                    1       1340 1916-06-04        2019-03-18      NA        
+#>  7                    1       3638 1987-07-09        2019-06-06      2002-12-13
+#>  8                    1        320 1961-02-23        2019-03-31      NA        
+#>  9                    1       2337 1978-01-28        2018-09-12      2003-07-26
+#> 10                    1       4467 1966-08-27        2019-02-21      1987-07-09
 #> # ℹ more rows
 #> # ℹ 1 more variable: acetaminophen <date>
 ```
@@ -173,19 +156,19 @@ cdm$cohort_entry_last <- cdm$cohort_dates |>
 
 cdm$cohort_entry_last
 #> # Source:   table<results.test_cohort_entry_last> [?? x 4]
-#> # Database: DuckDB 1.4.3 [unknown@Linux 6.11.0-1018-azure:R 4.5.2//tmp/RtmpZljjUe/file24bae3e85ba.duckdb]
+#> # Database: DuckDB 1.4.3 [unknown@Linux 6.11.0-1018-azure:R 4.5.2//tmp/Rtmpk0DLV0/file26f52f8a5a3a.duckdb]
 #>    cohort_definition_id subject_id cohort_start_date cohort_end_date
 #>                   <int>      <int> <date>            <date>         
-#>  1                    1         16 2017-11-02        2017-11-02     
-#>  2                    1         38 2019-01-30        2019-01-30     
-#>  3                    1        153 2018-11-01        2018-11-01     
-#>  4                    1        715 2018-02-20        2018-02-20     
-#>  5                    1        857 2016-05-30        2016-05-30     
-#>  6                    1       1102 2019-02-05        2019-02-05     
-#>  7                    1       1132 2018-07-30        2018-07-30     
-#>  8                    1       1352 2019-02-03        2019-02-03     
-#>  9                    1       1524 2019-05-02        2019-05-02     
-#> 10                    1       1770 2017-12-31        2017-12-31     
+#>  1                    1        297 2018-11-27        2018-11-27     
+#>  2                    1        484 2019-07-01        2019-07-01     
+#>  3                    1        877 2019-05-14        2019-05-14     
+#>  4                    1       1005 2018-11-20        2018-11-20     
+#>  5                    1       1083 2019-06-06        2019-06-06     
+#>  6                    1       1145 2018-10-12        2018-10-12     
+#>  7                    1       1159 2018-05-27        2018-05-27     
+#>  8                    1       1533 2018-10-10        2018-10-10     
+#>  9                    1       1854 2018-11-27        2018-11-27     
+#> 10                    1       1911 2009-11-16        2009-11-16     
 #> # ℹ more rows
 ```
 
@@ -213,19 +196,19 @@ cdm$cohort_exit_first <- cdm$cohort_dates |>
 
 cdm$cohort_exit_first 
 #> # Source:   table<results.test_cohort_exit_first> [?? x 4]
-#> # Database: DuckDB 1.4.3 [unknown@Linux 6.11.0-1018-azure:R 4.5.2//tmp/RtmpZljjUe/file24bae3e85ba.duckdb]
+#> # Database: DuckDB 1.4.3 [unknown@Linux 6.11.0-1018-azure:R 4.5.2//tmp/Rtmpk0DLV0/file26f52f8a5a3a.duckdb]
 #>    cohort_definition_id subject_id cohort_start_date cohort_end_date
 #>                   <int>      <int> <date>            <date>         
-#>  1                    1        103 1967-05-28        1990-08-16     
-#>  2                    1        186 1971-11-22        1991-01-11     
-#>  3                    1        286 1928-05-05        1943-01-01     
-#>  4                    1        349 1957-08-31        1994-01-21     
-#>  5                    1        687 1967-01-21        1974-12-12     
-#>  6                    1        785 1963-12-09        1966-09-24     
-#>  7                    1       1526 1971-12-30        2005-09-30     
-#>  8                    1       2004 1971-06-01        1987-01-08     
-#>  9                    1       2026 1952-01-12        2009-02-11     
-#> 10                    1       2332 1957-04-21        1957-05-21     
+#>  1                    1        276 1977-06-10        1983-04-11     
+#>  2                    1        387 1973-08-31        1975-08-22     
+#>  3                    1        525 1949-04-04        1994-09-07     
+#>  4                    1        700 1978-06-14        2003-05-06     
+#>  5                    1       1118 1973-08-12        1990-06-03     
+#>  6                    1       1496 1920-04-18        1924-06-28     
+#>  7                    1       1864 1965-12-03        1971-04-08     
+#>  8                    1       1962 1964-04-09        1979-06-03     
+#>  9                    1       2088 1908-09-22        1909-09-18     
+#> 10                    1       2176 1956-08-20        1959-01-08     
 #> # ℹ more rows
 ```
 
@@ -246,19 +229,19 @@ cdm$cohort_exit_last <- cdm$cohort_dates |>
   )
 cdm$cohort_exit_last
 #> # Source:   table<results.test_cohort_exit_last> [?? x 4]
-#> # Database: DuckDB 1.4.3 [unknown@Linux 6.11.0-1018-azure:R 4.5.2//tmp/RtmpZljjUe/file24bae3e85ba.duckdb]
+#> # Database: DuckDB 1.4.3 [unknown@Linux 6.11.0-1018-azure:R 4.5.2//tmp/Rtmpk0DLV0/file26f52f8a5a3a.duckdb]
 #>    cohort_definition_id subject_id cohort_start_date cohort_end_date
 #>                   <int>      <int> <date>            <date>         
-#>  1                    1        163 1966-06-28        2018-07-10     
-#>  2                    1        209 1951-02-23        2019-06-07     
-#>  3                    1        484 1938-01-03        2019-07-01     
-#>  4                    1        564 1955-10-20        2018-09-27     
-#>  5                    1        877 1977-05-03        2019-05-14     
-#>  6                    1       1159 1980-07-27        2018-05-27     
-#>  7                    1       1439 1977-08-13        2019-05-18     
-#>  8                    1       1746 1952-11-13        2019-05-02     
-#>  9                    1       1911 1945-11-26        2009-11-16     
-#> 10                    1       2051 1962-11-18        2018-12-23     
+#>  1                    1        141 1984-02-29        2019-01-02     
+#>  2                    1        153 1943-06-10        2018-11-01     
+#>  3                    1        828 1952-07-22        2005-06-21     
+#>  4                    1       1102 1967-01-24        2019-02-05     
+#>  5                    1       1960 1930-07-08        2010-04-13     
+#>  6                    1       2684 1961-02-12        2018-08-26     
+#>  7                    1       2935 1976-04-07        2018-06-08     
+#>  8                    1       2939 1953-01-20        2018-09-04     
+#>  9                    1       2959 1970-12-22        2018-11-16     
+#> 10                    1       3103 1977-06-15        2018-10-07     
 #> # ℹ more rows
 ```
 
@@ -287,11 +270,6 @@ to the day before turning 66 (or before if they leave the database).
 ``` r
 cdm$cohort_trim <- cdm$cohort |>
   trimDemographics(ageRange = c(18, 65), name = "cohort_trim")
-#> ℹ Building new trimmed cohort
-#> Adding demographics information
-#> Creating initial cohort
-#> Trim age
-#> ✔ Cohort trimmed
 ```
 
 ### `trimToDateRange()`

@@ -85,10 +85,13 @@ measurementCohort(
 
 - useRecordsBeforeObservation:
 
-  If FALSE, only records in observation will be used. If TRUE, records
-  before the start of observation period will be considered, with cohort
-  start date set as the start date of the individuals next observation
-  period (as cohort records must be within observation).
+  If FALSE, only records that fall entirely (start and end) within an
+  observation period are used. If TRUE, records that start before an
+  observation period are included by shifting their start date to the
+  beginning of the individual's subsequent observation period, and
+  records that start or end outside an observation period are trimmed so
+  that cohort records fall entirely within the corresponding observation
+  period.
 
 - useSourceFields:
 
@@ -196,7 +199,7 @@ cdm$cohort2 <- measurementCohort(
 #> ℹ Getting records in observation.
 #> Warning: There were 3 warnings in `dplyr::mutate()`.
 #> The first warning was:
-#> ℹ In argument: `trim_record = &...`.
+#> ℹ In argument: `min_days_start = min(.data$days_start_obs, na.rm = TRUE)`.
 #> ℹ In group 1: `cohort_definition_id = 1`, `subject_id = 1`, `cohort_start_date
 #>   = 2000-12-11`, `cohort_end_date = 2000-12-11`.
 #> Caused by warning in `min()`:

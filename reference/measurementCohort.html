@@ -25,7 +25,7 @@ If both are provided, records that meet either filter will be included.
 
     <a class="navbar-brand me-2" href="../index.html">CohortConstructor</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.6.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -147,11 +147,13 @@ Accepts "measurement", "observation", or both.</p></dd>
 
 
 <dt id="arg-userecordsbeforeobservation">useRecordsBeforeObservation<a class="anchor" aria-label="anchor" href="#arg-userecordsbeforeobservation"></a></dt>
-<dd><p>If FALSE, only records in observation will
-be used. If TRUE, records before the start of observation period will be
-considered, with cohort start date set as the start date of the
-individuals next observation period (as cohort records must be within
-observation).</p></dd>
+<dd><p>If FALSE, only records that fall entirely
+(start and end) within an observation period are used.
+If TRUE, records that start before an observation period are included by
+shifting their start date to the beginning of the individual's subsequent
+observation period, and records that start or end outside an observation
+period are trimmed so that cohort records fall entirely within the
+corresponding observation period.</p></dd>
 
 
 <dt id="arg-usesourcefields">useSourceFields<a class="anchor" aria-label="anchor" href="#arg-usesourcefields"></a></dt>
@@ -260,7 +262,7 @@ are included.</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Getting records in observation.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>There were 3 warnings in `dplyr::mutate()`.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> The first warning was:</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> In argument: `trim_record = &amp;...`.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> In argument: `min_days_start = min(.data$days_start_obs, na.rm = TRUE)`.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> In group 1: `cohort_definition_id = 1`, `subject_id = 1`, `cohort_start_date</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span>   = 2000-12-11`, `cohort_end_date = 2000-12-11`.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> Caused by warning in `min()`:</span>
