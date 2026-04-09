@@ -1,44 +1,74 @@
-#' Filter clinical tables to keep only current events
+#' Require cohort subjects have a current event in clinical tables
 #'
 #' @description
-#' `requireCurrentEvent()` filters clinical tables in a CDM object, keeping only
-#' records where the date field and the date part of the datetime field are equal.
-#' This is used to distinguish confirmed "current events" from historical or
-#' discordant events.
+#' `requireCurrentEvent()` filters cohort records, keeping only those for
+#' which the index date corresponds to a "current event" in the specified
+#' clinical tables. A current event is defined as a record where the date field
+#' and the date part of the datetime field are equal, distinguishing confirmed
+#' current events from historical or discordant events.
 #'
-#' @param cdm A cdm_reference object.
-#' @param tables A character vector specifying the names of the tables to filter.
-#' Default is `c("condition_occurrence", "procedure_occurrence", "observation")`.
+#' @inheritParams cohortDoc
+#' @inheritParams cohortIdModifyDoc
+#' @inheritParams nameDoc
+#' @param tables A character vector specifying the names of the tables to
+#' check for current events. Default is `c("condition_occurrence", "procedure_occurrence",
+#' "observation")`.
+#' @param indexDate Name of the column in the cohort that contains the date of
+#' interest to match with the event date.
 #'
-#' @return A modified cdm_reference object where the specified tables are filtered.
+#' @return A modified cohort table
 #'
 #' @export
 #'
 #' @examples
 #' \donttest{
 #' library(CohortConstructor)
-#' library(omopgenerics)
 #' cdm <- mockCohortConstructor()
-#' cdm <- requireCurrentEvent(cdm)
+#' cdm$cohort1 <- requireCurrentEvent(cdm$cohort1)
 #' }
-requireCurrentEvent <- function(cdm,
-                                tables = c("condition_occurrence",
-                                           "procedure_occurrence",
-                                           "observation")) {
+requireCurrentEvent <- function(cohort,
+                                tables = c(
+                                  "condition_occurrence",
+                                  "procedure_occurrence",
+                                  "observation"
+                                ),
+                                cohortId = NULL,
+                                indexDate = "cohort_start_date",
+                                name = tableName(cohort)) {
   # checks
-  cdm <- omopgenerics::validateCdmArgument(cdm)
+  name <- omopgenerics::validateNameArgument(name, validation = "warning")
+  cohort <- omopgenerics::validateCohortArgument(cohort)
+  validateCohortColumn(indexDate, cohort, class = "date")
+  cdm <- omopgenerics::validateCdmArgument(omopgenerics::cdmReference(cohort))
+  cohortId <- omopgenerics::validateCohortIdArgument(cohortId, cohort, validation = "warning")
   omopgenerics::assertCharacter(tables, null = TRUE)
 
+  if (length(cohortId) == 0) {
+    cli::cli_inform("Returning entry cohort as `cohortId` is not valid.")
+    # return entry cohort as cohortId is used to modify not subset
+    cdm[[name]] <- cohort |> dplyr::compute(name = name, temporary = FALSE,
+                                            logPrefix = "CohortConstructor_requireCurrentEvent_entry_")
+    return(cdm[[name]])
+  }
+
   if (is.null(tables)) {
-    return(cdm)
+    return(cohort |> dplyr::compute(name = name, temporary = FALSE,
+                                    logPrefix = "CohortConstructor_requireCurrentEvent_null_"))
   }
 
-  tables_to_filter <- intersect(tables, names(cdm))
+  tables_to_check <- intersect(tables, names(cdm))
 
-  if (length(tables_to_filter) == 0) {
+  if (length(tables_to_check) == 0) {
     cli::cli_inform("None of the specified tables were found in the cdm object.")
-    return(cdm)
+    return(cohort |> dplyr::compute(name = name, temporary = FALSE,
+                                    logPrefix = "CohortConstructor_requireCurrentEvent_notables_"))
   }
+
+  tablePrefix <- omopgenerics::tmpPrefix()
+  tmpNewCohort <- omopgenerics::uniqueTableName(tablePrefix)
+  tmpUnchanged <- omopgenerics::uniqueTableName(tablePrefix)
+  cdm <- filterCohortInternal(cdm, cohort, cohortId, tmpNewCohort, tmpUnchanged)
+  newCohort <- cdm[[tmpNewCohort]]
 
   # Mapping of table names to their date and datetime prefixes
   table_prefixes <- list(
@@ -53,7 +83,8 @@ requireCurrentEvent <- function(cdm,
     "note" = "note"
   )
 
-  for (tbl_name in tables_to_filter) {
+  valid_events <- list()
+  for (tbl_name in tables_to_check) {
     prefix <- table_prefixes[[tbl_name]]
 
     if (is.null(prefix)) {
@@ -67,16 +98,63 @@ requireCurrentEvent <- function(cdm,
     cols <- colnames(cdm[[tbl_name]])
 
     if (date_col %in% cols && datetime_col %in% cols) {
-      # Use lazy evaluation; omopgenerics will correctly retain OMOP table classes
-      cdm[[tbl_name]] <- cdm[[tbl_name]] |>
-        dplyr::filter(as.Date(.data[[date_col]]) == as.Date(.data[[datetime_col]]))
+      valid_events[[tbl_name]] <- cdm[[tbl_name]] |>
+        dplyr::filter(as.Date(.data[[date_col]]) == as.Date(.data[[datetime_col]])) |>
+        dplyr::select("subject_id" = "person_id", !!indexDate := dplyr::all_of(date_col)) |>
+        dplyr::distinct()
     } else {
-      # Warn only if it's one of the explicitly requested tables, not just discovered ones
       if (tbl_name %in% c("condition_occurrence", "procedure_occurrence", "observation")) {
         cli::cli_warn(sprintf("Table '%s' does not have both '%s' and '%s' columns. Skipping.", tbl_name, date_col, datetime_col))
       }
     }
   }
 
-  return(cdm)
+  if (length(valid_events) == 0) {
+    # No events found, return empty subset for this cohortId
+    newCohort <- newCohort |> dplyr::filter(FALSE)
+    reason <- "No valid current events found"
+  } else {
+    # Union all valid events across tables
+    all_events <- valid_events[[1]]
+    if (length(valid_events) > 1) {
+      for (i in 2:length(valid_events)) {
+        all_events <- dplyr::union(all_events, valid_events[[i]])
+      }
+    }
+
+    newCohort <- newCohort |>
+      dplyr::inner_join(
+        all_events |> dplyr::distinct(),
+        by = c("subject_id", indexDate)
+      ) |>
+      dplyr::compute(name = tmpNewCohort, temporary = FALSE,
+                     logPrefix = "CohortConstructor_requireCurrentEvent_join_")
+    
+    reason <- paste0("Current event in ", paste0(names(valid_events), collapse = " or "), " on ", indexDate)
+  }
+
+  if (isTRUE(needsIdFilter(cohort, cohortId))) {
+    newCohort <- newCohort |>
+      dplyr::union_all(cdm[[tmpUnchanged]]) |>
+      dplyr::compute(name = tmpNewCohort, temporary = FALSE,
+                     logPrefix = "CohortConstructor_requireCurrentEvent_union_")
+  }
+
+  newCohort <- newCohort |>
+    dplyr::compute(name = name, temporary = FALSE,
+                   logPrefix = "CohortConstructor_requireCurrentEvent_name_") |>
+    omopgenerics::newCohortTable(.softValidation = TRUE) |>
+    omopgenerics::recordCohortAttrition(reason = reason, cohortId = cohortId)
+
+  omopgenerics::dropSourceTable(cdm = cdm, name = dplyr::starts_with(tablePrefix))
+
+  useIndexes <- getOption("CohortConstructor.use_indexes")
+  if (!isFALSE(useIndexes)) {
+    addIndex(
+      cohort = newCohort,
+      cols = c("subject_id", "cohort_start_date")
+    )
+  }
+
+  return(newCohort)
 }
