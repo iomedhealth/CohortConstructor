@@ -11,3 +11,6 @@ docs
 /sql
 /sql_1
 extras/data/*
+..Rcheck/
+AGENTS.md
+update_requireCurrentEvent.md
